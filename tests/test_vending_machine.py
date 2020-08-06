@@ -1,13 +1,14 @@
+import pytest
+
 from vending_machine.vending_machine import vending_machine
 
 class TestVendingMachine:
-    def test_insert(self) -> None:
-        input = 100
-
+    @pytest.mark.parametrize("input, expected", [(1, 0), (5, 0), (10, 10), (50, 50), (100, 100), (500, 500), (1000, 1000)])
+    def test_insert(self, input, expected) -> None:
         machine = vending_machine()
         machine.insert(input)
 
-        assert machine.get_total_amount() == input
+        assert machine.get_total_amount() == expected
 
     def test_get_total_amount(self) -> None:
         machine = vending_machine()

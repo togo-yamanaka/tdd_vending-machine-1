@@ -4,7 +4,11 @@ class vending_machine:
         self.money = 0
 
     def insert(self, add_money) -> None:
-        self.money += add_money
+        avalable_money = [10, 50, 100, 500, 1000]
+        if add_money in avalable_money:
+            self.money += add_money
+        else:
+            return add_money
 
     def get_total_amount(self) -> int:
         return self.money
