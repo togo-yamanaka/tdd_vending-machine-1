@@ -2,9 +2,20 @@ import pytest
 
 from vending_machine.vending_machine import vending_machine
 
+
 class TestVendingMachine:
-    @pytest.mark.parametrize("input, total_amount, return_money",
-    [(1, 0, 1), (5, 0, 5), (10, 10, None), (50, 50, None), (100, 100, None), (500, 500, None), (1000, 1000, None)])
+    @pytest.mark.parametrize(
+        "input, total_amount, return_money",
+        [
+            (1, 0, 1),
+            (5, 0, 5),
+            (10, 10, None),
+            (50, 50, None),
+            (100, 100, None),
+            (500, 500, None),
+            (1000, 1000, None),
+        ],
+    )
     def test_insert(self, input, total_amount, return_money) -> None:
         machine = vending_machine()
         change = machine.insert(input)
