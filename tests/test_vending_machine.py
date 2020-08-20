@@ -18,36 +18,36 @@ class TestVendingMachine:
     # )
     def test_insert(self):  # , input, total_amount, return_money) -> None:
         machine = VendingMachine()
-        coin = Coin(50)
+        assert machine.insert(50) == 0
+        assert machine.get_total_amount() == 50
 
-        machine.insert(coin)
-
-        assert machine.get_total_amount() == coin.amount
+        machine2 = VendingMachine()
+        assert machine2.insert(320) == 320
+        assert machine2.get_total_amount() == 0
 
     def test_get_total_amount(self) -> None:
         machine = VendingMachine()
-        machine.insert(Coin(10))
-        machine.insert(Coin(50))
-        machine.insert(Coin(100))
-        machine.insert(Coin(500))
-        machine.insert(Coin(1000))
+        machine.insert(10)
+        machine.insert(50)
+        machine.insert(100)
+        machine.insert(500)
+        machine.insert(1000)
 
         assert machine.get_total_amount() == 1660
 
     def test_refund(self) -> None:
         machine = VendingMachine()
-        machine.insert(Coin(10))
-        machine.insert(Coin(50))
-        machine.insert(Coin(100))
-        machine.insert(Coin(500))
-        machine.insert(Coin(1000))
+        machine.insert(10)
+        machine.insert(50)
+        machine.insert(100)
+        machine.insert(500)
+        machine.insert(1000)
 
         assert machine.refund() == 1660
         assert machine.get_total_amount() == 0
 
-    def test_invalid_coin_generate(self):
+    def test_juice(self):
+        machine = VendingMachine()
 
-        try:
-            Coin(320)
-        except Exception as e:
-            assert e.message == "正常なコインではありません"
+        assert machine.check_stock("コーラ") == 5
+        assert machine.check_price("コーラ") == 120
