@@ -60,6 +60,7 @@
     "ms-pyright.pyright",
     "shardulm94.trailing-spaces",
     "oderwat.indent-rainbow",
-    "2gua.rainbow-brackets"
+    "2gua.rainbow-brackets",
+    "littlefoxteam.vscode-python-test-adapter"
   ]
 }
