@@ -1,6 +1,6 @@
 version: "3"
 services:
-  tdd_vending-machine:
+  create_compiler_in_python:
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
@@ -9,6 +9,6 @@ services:
     volumes:
       - .:/project
       - ${USERPROFILE-~}/.ssh:/home/vscode/.ssh
-    image: tdd_vending-machine-image
-    container_name: tdd_vending-machine-container
+    image: create_compiler_in_python-image
+    container_name: create_compiler_in_python-container
     tty: true

@@ -1,9 +1,11 @@
 // ref. https://github.com/Microsoft/vscode-remote-try-python
 {
-  "name": "tdd_vending-machine",
+  "name": "create_compiler_in_python",
   // Use docker-compose.extend.yml to run a command that keeps the container running.
-  "dockerComposeFile": ["../docker-compose.yml"],
-  "service": "tdd_vending-machine",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "create_compiler_in_python",
   "workspaceFolder": "/project",
   "shutdownAction": "stopCompose",
   // Comment out the next line to run as root instead. Linux users,
@@ -19,11 +21,19 @@
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": ["--config=.flake8"],
+    "python.linting.flake8Args": [
+      "--config=.flake8"
+    ],
     "python.linting.lintOnSave": true,
     "python.formatting.provider": "black",
-    "python.formatting.blackArgs": ["--line-length", "100"],
-    "python.testing.pytestArgs": ["--verbose", "--showlocals"],
+    "python.formatting.blackArgs": [
+      "--line-length",
+      "100"
+    ],
+    "python.testing.pytestArgs": [
+      "--verbose",
+      "--showlocals"
+    ],
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestsEnabled": false,
     "python.testing.pytestEnabled": true,
@@ -47,6 +57,9 @@
     "esbenp.prettier-vscode",
     "njpwerner.autodocstring",
     "eamodio.gitlens",
-    "ms-pyright.pyright"
+    "ms-pyright.pyright",
+    "shardulm94.trailing-spaces",
+    "oderwat.indent-rainbow",
+    "2gua.rainbow-brackets"
   ]
 }
