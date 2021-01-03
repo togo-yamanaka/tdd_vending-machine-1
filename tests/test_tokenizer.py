@@ -4,7 +4,7 @@ Tokenizerのテスト
 
 from functools import reduce
 from unittest import TestCase
-from cc9.tokenizer import tokenize, Token, TokenKind
+from cc9.tokenizer import TokenOperator, tokenize, Token, TokenKind
 
 
 def linked_list_helper(a, b):
@@ -91,3 +91,37 @@ class TestTokenizer(TestCase):
             assert str(token) == str(expected_token)
             token = token.next
             expected_token = expected_token.next
+
+
+class TestTokenOperator(TestCase):
+    def setUp(self):
+        self.token_list = [
+            Token(TokenKind.SYMBOL, "("),
+            Token(TokenKind.NUMBER, "1"),
+            Token(TokenKind.SYMBOL, "+"),
+            Token(TokenKind.NUMBER, "3"),
+            Token(TokenKind.SYMBOL, ")"),
+            Token(TokenKind.SYMBOL, "*"),
+            Token(TokenKind.NUMBER, "2"),
+            Token(TokenKind.EOF),
+        ]
+
+        reduce(linked_list_helper, self.token_list)
+        self.test_token = self.token_list[0]
+
+    def test_proceed_cursor(self):
+
+        operator = TokenOperator(self.token_list[0])
+        operator.proceed_cursor()
+
+        assert str(self.token_list[1]) == str(operator.cursor)
+
+    def test_consume(self):
+
+        operator = TokenOperator(self.token_list[0])
+
+        assert operator.consume("(") is True
+        assert str(self.token_list[1]) == str(operator.cursor)
+
+        assert operator.consume("1") is True
+        assert str(self.token_list[2]) == str(operator.cursor)

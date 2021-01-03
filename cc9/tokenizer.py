@@ -37,11 +37,12 @@ class TokenOperator:
 
     def __init__(self, token: Token) -> None:
         """初期化"""
-        if isinstance(self.cursor.next, Token) is False:
+        if isinstance(token, Token) is False:
             raise ValueError("受け取ったオブジェクトはTokenではありません")
         self.cursor = token
 
     def get_value(self) -> Union[str, int, None]:
+        """カーソルが指すトークンの値を取得する"""
         return self.cursor.value
 
     def proceed_cursor(self) -> None:
@@ -59,13 +60,13 @@ class TokenOperator:
         """カーソルが指しているトークンが期待の値を持つか調べる"""
         return self.cursor.type == kind
 
-    def consume(self, value):
-        """xxx"""
-        if result := self.check_value(value):
-            self.proceed_cursor()
-        return result
+    def consume(self, value) -> bool:
+        """
+        カーソルが指すトークンの値とvalueを比較する
 
-    def expect(self, value):
+        比較が一致するときはTrueを返してカーソルを進める
+        そうでないときはFalseを返す
+        """
         if result := self.check_value(value):
             self.proceed_cursor()
         return result
