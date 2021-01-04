@@ -40,6 +40,9 @@
     "pythonTestExplorer.testFramework": "pytest",
     "python.testing.autoTestDiscoverOnSaveEnabled": true,
     "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.extraPaths": [
+      "/project/cc9/"
+    ],
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       // TODO: sortが終わらないエラーが発生するためコメントアウト
@@ -59,7 +62,6 @@
     "esbenp.prettier-vscode",
     "njpwerner.autodocstring",
     "eamodio.gitlens",
-    "ms-pyright.pyright",
     "shardulm94.trailing-spaces",
     "oderwat.indent-rainbow",
     "2gua.rainbow-brackets",
