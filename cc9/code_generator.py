@@ -2,7 +2,7 @@
 code generator
 """
 
-from parser import Node, NodeKind
+from token_parser import Node, NodeKind
 
 
 def generate_code(node: Node) -> None:
