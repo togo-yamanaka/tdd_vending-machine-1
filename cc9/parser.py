@@ -4,7 +4,7 @@ Parserクラス
 
 
 from __future__ import annotations
-from cc9.tokenizer import TokenKind, TokenOperator
+from tokenizer import TokenKind, TokenOperator
 from enum import IntEnum, auto
 from typing import Union
 
@@ -113,7 +113,6 @@ class Parser:
 
         while 1:
             if cursor.consume("+"):
-                print("into add expression")
                 node = self.create_new_node("+", NodeKind.ADD, node, self.mul(cursor))
             elif cursor.consume("-"):
                 node = self.create_new_node("-", NodeKind.SUB, node, self.mul(cursor))
