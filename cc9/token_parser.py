@@ -6,7 +6,7 @@ Parserクラス
 from __future__ import annotations
 from tokenizer import TokenKind, TokenOperator
 from enum import IntEnum, auto
-from typing import Union
+from typing import List, Union
 
 
 class NodeKind(IntEnum):
@@ -22,6 +22,8 @@ class NodeKind(IntEnum):
     LOWER_EQUAL = auto()  # <=
     EQUAL = auto()  # ==
     NOT_EQUAL = auto()  # !=
+    ASSIGN = auto()  # =
+    LOCAL_VAR = auto()  # LOCAL VARIABLE
     NUMBER = auto()  # NUMBER
 
 
@@ -32,6 +34,7 @@ class Node:
         """初期化"""
         self.value: Union[int, str, None] = None
         self.kind: Union[NodeKind, None] = None
+        self.offset: Union[int, None] = None
         self.left_hand: Union[Node, None] = None
         self.right_hand: Union[Node, None] = None
 
@@ -66,20 +69,33 @@ class Parser:
         node.left_hand = left_hand
         return node
 
-    def run(self) -> Node:
+    def run(self) -> List[Node]:
         """パーサの実行"""
-        node = self.statement(self.cursor)
+        nodes = self.program(self.cursor)
 
         if self.cursor.chack_type(TokenKind.EOF) is False:
             raise IndexError("パース出来ていないトークンが存在します")
 
-        return node
+        return nodes
 
-    # def program(self, cursor: TokenOperator) -> Node:
-    #     pass
+    def program(self, cursor: TokenOperator) -> List[Node]:
+        """
+        program具象構文木
+
+        program = statement*
+        """
+        nodes = []
+        while cursor.chack_type(TokenKind.EOF) is False:
+            nodes.append(self.statement(cursor))
+
+        return nodes
 
     def statement(self, cursor: TokenOperator) -> Node:
-        """statement具象構文木"""
+        """
+        statement具象構文木
+
+        statement = expression ";"
+        """
         node = self.expression(cursor)
 
         if cursor.consume(";") is False:
@@ -89,10 +105,27 @@ class Parser:
 
     def expression(self, cursor: TokenOperator) -> Node:
         """expression具象構文木"""
-        return self.equality(cursor)
+        return self.assign(cursor)
+
+    def assign(self, cursor: TokenOperator) -> Node:
+        """
+        assign具象構文木
+
+        assign = equality ("=" assign)?
+        """
+        node = self.equality(cursor)
+
+        if cursor.consume("="):
+            node = self.create_new_node("=", NodeKind.ASSIGN, node, self.assign(cursor))
+
+        return node
 
     def equality(self, cursor: TokenOperator) -> Node:
-        """equality具象構文木"""
+        """
+        equality具象構文木
+
+        equality = relation ("==" relation | "!=" relation)*
+        """
         node = self.relation(cursor)
 
         while 1:
@@ -104,7 +137,11 @@ class Parser:
                 return node
 
     def relation(self, cursor: TokenOperator) -> Node:
-        """relation具象構文木"""
+        """
+        relation具象構文木
+
+        relation = add ("<" add | "<=" add | ">" add | ">=" add )*
+        """
         node = self.add(cursor)
 
         while 1:
@@ -120,7 +157,11 @@ class Parser:
                 return node
 
     def add(self, cursor: TokenOperator) -> Node:
-        """add具象構文木"""
+        """
+        add具象構文木
+
+        add = mul("+" mul| "-" mul)*
+        """
         node = self.mul(cursor)
 
         while 1:
@@ -132,7 +173,11 @@ class Parser:
                 return node
 
     def mul(self, cursor: TokenOperator) -> Node:
-        """mul具象構文木"""
+        """
+        mul具象構文木
+
+        mul = unary("*" unary | "/" unary)*
+        """
         node = self.unary(cursor)
 
         while 1:
@@ -144,7 +189,11 @@ class Parser:
                 return node
 
     def unary(self, cursor: TokenOperator) -> Node:
-        """unary具象構文木"""
+        """
+        unary具象構文木
+
+        unary = ("+" | "-")? primary
+        """
         if cursor.consume("+"):
             return self.primary(cursor)
         if cursor.consume("-"):
@@ -158,16 +207,31 @@ class Parser:
         return self.primary(cursor)
 
     def primary(self, cursor: TokenOperator) -> Node:
-        """primary具象構文木"""
+        """
+        primary具象構文木
+
+        primary = num | identifier | "(" expression ")"
+        """
+        # (expr)
         if cursor.consume("("):
             node = self.expression(cursor)
             if cursor.consume(")") is False:
                 raise ValueError("トークンのカッコが左右で対応していません")
             return node
 
+        # identifier
+        if cursor.chack_type(TokenKind.IDENTIFIER):
+            value = cursor.get_value()
+            cursor.proceed_cursor()
+
+            new_node = self.create_new_node(value, NodeKind.LOCAL_VAR, None, None)
+            new_node.offset = (ord(value) - ord("a") + 1) * 8
+            return new_node
+
         if cursor.chack_type(TokenKind.NUMBER) is False:
             raise TypeError("数値型のトークンではありません")
 
+        # num
         value = cursor.get_value()
         cursor.proceed_cursor()
 

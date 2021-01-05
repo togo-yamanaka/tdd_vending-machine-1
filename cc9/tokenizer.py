@@ -117,7 +117,7 @@ def tokenize(input_str: str) -> Union[Token, None]:
             i += len(value)
             continue
 
-        if input_str[i] in ("+", "-", "*", "/", "(", ")", ">", "<", ";"):
+        if input_str[i] in ("+", "-", "*", "/", "(", ")", ">", "<", ";", "="):
             cursor.next = Token(token_type=TokenKind.SYMBOL, value=input_str[i])
 
             cursor = cursor.next

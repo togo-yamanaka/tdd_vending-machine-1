@@ -16,8 +16,8 @@ def main(argv: list) -> int:
 
     operator = TokenOperator(tokenize(argv[1]))
     parser = Parser(operator)
-    node = parser.run()
-    generate_code(node)
+    nodes = parser.run()
+    generate_code(nodes)
 
 
 if __name__ == "__main__":
