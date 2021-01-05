@@ -13,6 +13,7 @@ class TokenKind(IntEnum):
 
     SYMBOL = auto()
     NUMBER = auto()
+    IDENTIFIER = auto()
     EOF = auto()
 
 
@@ -116,11 +117,19 @@ def tokenize(input_str: str) -> Union[Token, None]:
             i += len(value)
             continue
 
-        if input_str[i] in ("+", "-", "*", "/", "(", ")", ">", "<"):
+        if input_str[i] in ("+", "-", "*", "/", "(", ")", ">", "<", ";"):
             cursor.next = Token(token_type=TokenKind.SYMBOL, value=input_str[i])
 
             cursor = cursor.next
             i += 1
+            continue
+
+        if re_obj := re.match("[a-z]", input_str[i:]):
+            value = re_obj.group()
+            cursor.next = Token(token_type=TokenKind.IDENTIFIER, value=value)
+
+            cursor = cursor.next
+            i += len(value)
             continue
 
         if str.isdecimal(input_str[i]):

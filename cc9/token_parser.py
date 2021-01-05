@@ -68,10 +68,22 @@ class Parser:
 
     def run(self) -> Node:
         """パーサの実行"""
-        node = self.expression(self.cursor)
+        node = self.statement(self.cursor)
 
         if self.cursor.chack_type(TokenKind.EOF) is False:
             raise IndexError("パース出来ていないトークンが存在します")
+
+        return node
+
+    # def program(self, cursor: TokenOperator) -> Node:
+    #     pass
+
+    def statement(self, cursor: TokenOperator) -> Node:
+        """statement具象構文木"""
+        node = self.expression(cursor)
+
+        if cursor.consume(";") is False:
+            raise ValueError("プログラムの末尾が;で終わっていません")
 
         return node
 
